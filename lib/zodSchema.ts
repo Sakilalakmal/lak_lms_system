@@ -1,0 +1,50 @@
+import { z } from "zod";
+import { coerce } from "zod/v3";
+
+export const courseLevel = ["Beginner", "Intermediate", "Advanced"] as const;
+
+export const courseStatus = ["Draft", "Published", "Archived"] as const;
+
+export const courseCategories = [
+  "Development",
+  "Business",
+  "Finance",
+  "It & Software",
+  "Personal Development",
+  "design",
+  "Marketing",
+  "Health & Fitness",
+  "Music",
+  "Photography",
+  "Teaching & Academics",
+] as const;
+
+export const courseSchema = z.object({
+  title: z
+    .string()
+    .min(3, { message: "Title must be at least 3 characters" })
+    .max(200, { message: "Title must be at most 200 characters" }),
+  description: z
+    .string()
+    .min(3, { message: "Description must be at least 3 characters" })
+    .max(2500, { message: "Description must be at most 2500 characters" }),
+  fileKey: z.string().min(1, { message: "File Key is required" }),
+  price: z.number().min(1, { message: "Price must be positive number" }),
+  duration: z
+    .number()
+    .min(1, { message: "Duration must be Least 1 hour" })
+    .max(50, { message: "Duration must be maximum 50 hours" }),
+  level: z.enum(courseLevel, { message: "Level is required" }),
+  category: z.enum(courseCategories, { message: "Category is required" }),
+  smallDescription: z
+    .string()
+    .min(3, { message: "Small Description must be at least 3 characters" })
+    .max(200, { message: "Small Description must be at most 200 characters" }),
+  slug: z
+    .string()
+    .min(3, { message: "Slug must be at least 3 characters" })
+    .max(100, { message: "Slug must be at most 100 characters" }),
+  status: z.enum(courseStatus, { message: "Status is required" }),
+});
+
+export type CourseSchemaType = z.infer<typeof courseSchema>;
