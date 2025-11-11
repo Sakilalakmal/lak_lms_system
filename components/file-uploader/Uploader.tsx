@@ -13,6 +13,7 @@ import {
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { file } from "zod";
+import { useConstructUrl } from "@/hooks/use-contruct";
 
 interface UploaderProps {
   id: string | null;
@@ -32,6 +33,8 @@ interface courseImageUploadProps {
 }
 
 export function Uploader({ value, onChange }: courseImageUploadProps) {
+  const fileUrl = useConstructUrl(value || "");
+
   const [fileState, setFileState] = useState<UploaderProps>({
     error: false,
     file: null,
@@ -41,6 +44,7 @@ export function Uploader({ value, onChange }: courseImageUploadProps) {
     isDeleting: false,
     fileType: "image",
     key: value,
+    objectUrl: fileUrl,
   });
 
   async function uploadFile(file: File) {
