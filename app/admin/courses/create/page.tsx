@@ -12,11 +12,13 @@ import {
 import {
   courseCategories,
   courseLevel,
+  courseInputSchema,
   courseSchema,
+  CourseInputType,
   CourseSchemaType,
   courseStatus,
 } from "@/lib/zodSchema";
-import { ArrowLeft, PlusCircleIcon, SparkleIcon } from "lucide-react";
+import { ArrowLeft, Loader2, PlusCircleIcon, SparkleIcon } from "lucide-react";
 import Link from "next/link";
 import {
   Form,
@@ -40,14 +42,22 @@ import {
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 import { Uploader } from "@/components/file-uploader/Uploader";
+import { useTransition } from "react";
+import { tryCatch } from "@/hooks/try-catch";
+import { createCourseAction } from "./actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CreateCoursePage() {
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+
   //define form for validation
-  const form = useForm<CourseSchemaType>({
-    resolver: zodResolver(courseSchema),
+  const form = useForm<CourseInputType>({
+    resolver: zodResolver(courseInputSchema),
     defaultValues: {
-      price: 0,
-      duration: 0,
+      price: "",
+      duration: "",
       title: "",
       description: "",
       fileKey: "",
@@ -59,10 +69,23 @@ export default function CreateCoursePage() {
     },
   });
 
-  function onSubmit(values: CourseSchemaType) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  function onSubmit(values: CourseInputType) {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(createCourseAction(values));
+
+      if (error) {
+        toast.error("Something went wrong. Please try again.");
+        return;
+      }
+
+      if (data?.status === "success") {
+        toast.success(data.message);
+        form.reset();
+        router.push("/admin/courses");
+      } else if (data?.status === "error") {
+        toast.error(data.message);
+      }
+    });
   }
 
   return (
@@ -169,8 +192,7 @@ export default function CreateCoursePage() {
                   <FormItem className="w-full">
                     <FormLabel>Course thumbnail image</FormLabel>
                     <FormControl>
-                      <Uploader/>
-                      {/* <Input placeholder="thumbnail URL" {...field} /> */}
+                      <Uploader onChange={field.onChange} value={field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,7 +263,13 @@ export default function CreateCoursePage() {
                     <FormItem className="w-full">
                       <FormLabel>Duration (hours)</FormLabel>
                       <FormControl>
-                        <Input placeholder="duration" {...field} />
+                        <Input
+                          type="number"
+                          min="1"
+                          max="50"
+                          placeholder="duration"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -254,7 +282,13 @@ export default function CreateCoursePage() {
                     <FormItem className="w-full">
                       <FormLabel>Course Price ($)</FormLabel>
                       <FormControl>
-                        <Input placeholder="price" {...field} />
+                        <Input
+                          type="number"
+                          min="1"
+                          step="0.01"
+                          placeholder="price"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -287,8 +321,16 @@ export default function CreateCoursePage() {
                 )}
               />
 
-              <Button>
-                Create Course <PlusCircleIcon className="size-4" />
+              <Button type="submit" disabled={pending}>
+                {pending ? (
+                  <>
+                    Creating <Loader2 className="sze-4 animate-spin ml-1" />
+                  </>
+                ) : (
+                  <>
+                    Create Course <PlusCircleIcon className="size-4 ml-1" />
+                  </>
+                )}
               </Button>
             </form>
           </Form>

@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Card, CardContent } from "../ui/card";
 import { cn } from "@/lib/utils";
-import { RenderEmptyState, RendorErrorState } from "./RenderState";
+import {
+  RenderEmptyState,
+  RenderUploadedState,
+  RenderUploadingState,
+  RendorErrorState,
+} from "./RenderState";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { file } from "zod";
@@ -21,7 +26,12 @@ interface UploaderProps {
   fileType: "image" | "video";
 }
 
-export function Uploader() {
+interface courseImageUploadProps {
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+export function Uploader({ value, onChange }: courseImageUploadProps) {
   const [fileState, setFileState] = useState<UploaderProps>({
     error: false,
     file: null,
@@ -30,6 +40,7 @@ export function Uploader() {
     progress: 0,
     isDeleting: false,
     fileType: "image",
+    key: value,
   });
 
   async function uploadFile(file: File) {
@@ -89,13 +100,15 @@ export function Uploader() {
           if (xhr.status === 200 || xhr.status === 204) {
             console.log("✅ Upload successful to AWS S3!");
             console.log("🗝️ File Key:", Key);
-            
+
             setFileState((prev) => ({
               ...prev,
               progress: 100,
               uploading: false,
               key: Key,
             }));
+
+            onChange?.(Key);
 
             toast.success("File uploaded successfully to AWS S3!");
 
@@ -104,7 +117,9 @@ export function Uploader() {
             console.error("❌ AWS S3 Upload failed!");
             console.error("🔢 Status:", xhr.status);
             console.error("📝 Response:", xhr.responseText);
-            reject(new Error(`AWS S3 upload failed with status: ${xhr.status}`));
+            reject(
+              new Error(`AWS S3 upload failed with status: ${xhr.status}`)
+            );
           }
         };
 
@@ -117,13 +132,13 @@ export function Uploader() {
 
         xhr.open("PUT", presignedUrl);
         xhr.setRequestHeader("Content-Type", file.type);
-        
+
         console.log("🚀 Starting AWS S3 upload...");
         console.log("📁 File name:", file.name);
         console.log("📄 File type:", file.type);
         console.log("📏 File size:", file.size, "bytes");
-        console.log("🔗 Upload URL:", presignedUrl.split('?')[0]); // Hide query params for cleaner log
-        
+        console.log("🔗 Upload URL:", presignedUrl.split("?")[0]); // Hide query params for cleaner log
+
         xhr.send(file);
       });
     } catch (error) {
@@ -137,24 +152,88 @@ export function Uploader() {
     }
   }
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
 
-      setFileState({
-        file: file,
-        uploading: false,
-        progress: 0,
-        objectUrl: URL.createObjectURL(file),
-        error: false,
-        id: uuidv4(),
-        isDeleting: false,
-        fileType: "image",
+        if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+          URL.revokeObjectURL(fileState.objectUrl);
+        }
+
+        setFileState({
+          file: file,
+          uploading: false,
+          progress: 0,
+          objectUrl: URL.createObjectURL(file),
+          error: false,
+          id: uuidv4(),
+          isDeleting: false,
+          fileType: "image",
+        });
+
+        uploadFile(file);
+      }
+    },
+    [fileState.objectUrl]
+  );
+
+  async function handleRemoveFile() {
+    if (fileState.isDeleting || !fileState.objectUrl) return;
+
+    try {
+      setFileState((prev) => ({
+        ...prev,
+        isDeleting: true,
+      }));
+
+      const reponse = await fetch("/api/s3/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ key: fileState.key }),
       });
 
-      uploadFile(file);
+      if (!reponse.ok) {
+        toast.error("Failed to delete file from server.");
+        setFileState((prev) => ({
+          ...prev,
+          isDeleting: true,
+          error: true,
+        }));
+
+        return;
+      }
+
+      if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+        URL.revokeObjectURL(fileState.objectUrl);
+      }
+
+      onChange?.("");
+
+      setFileState(() => ({
+        file: null,
+        uploading: false,
+        progress: 0,
+        id: null,
+        isDeleting: false,
+        error: false,
+        fileType: "image",
+      }));
+
+      toast.success("File removed successfully.");
+    } catch (error) {
+      toast.error("Failed to delete file from server.");
+      setFileState((prev) => ({
+        ...prev,
+        isDeleting: false,
+        error: true,
+      }));
+
+      console.error("Error deleting file:", error);
     }
-  }, []);
+  }
 
   function rejectedFiles(fileRejection: FileRejection[]) {
     if (fileRejection.length) {
@@ -178,7 +257,12 @@ export function Uploader() {
 
   function renderContent() {
     if (fileState.uploading) {
-      return <h1>uploading....</h1>;
+      return (
+        <RenderUploadingState
+          file={fileState.file as File}
+          progress={fileState.progress}
+        />
+      );
     }
 
     if (fileState.error) {
@@ -186,11 +270,25 @@ export function Uploader() {
     }
 
     if (fileState.objectUrl) {
-      return <h1>uploaded file</h1>;
+      return (
+        <RenderUploadedState
+          handleRemove={handleRemoveFile}
+          isDeleting={fileState.isDeleting}
+          previewUrl={fileState.objectUrl!}
+        />
+      );
     }
 
     return <RenderEmptyState isDragActive={isDragActive} />;
   }
+
+  useEffect(() => {
+    return () => {
+      if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+        URL.revokeObjectURL(fileState.objectUrl);
+      }
+    };
+  }, [fileState.objectUrl]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -199,6 +297,7 @@ export function Uploader() {
     multiple: false,
     maxSize: 2 * 1024 * 1024,
     onDropRejected: rejectedFiles,
+    disabled: fileState.uploading || !!fileState.objectUrl,
     // 5MB
   });
   return (
