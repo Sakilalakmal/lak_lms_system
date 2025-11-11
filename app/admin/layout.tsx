@@ -12,14 +12,16 @@ export default function AdminLayout({
 }) {
   return (
     <SidebarProvider
+      defaultOpen={true}
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--sidebar-width-mobile": "calc(var(--spacing) * 72)",
           "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">

@@ -39,6 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
+import { Uploader } from "@/components/file-uploader/Uploader";
 
 export default function CreateCoursePage() {
   //define form for validation
@@ -155,11 +156,6 @@ export default function CreateCoursePage() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <RichTextEditor field={field} />
-                      {/* <Textarea
-                        placeholder="description"
-                        {...field}
-                        className="min-h-[200px]"
-                      /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -173,7 +169,8 @@ export default function CreateCoursePage() {
                   <FormItem className="w-full">
                     <FormLabel>Course thumbnail image</FormLabel>
                     <FormControl>
-                      <Input placeholder="thumbnail URL" {...field} />
+                      <Uploader/>
+                      {/* <Input placeholder="thumbnail URL" {...field} /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
