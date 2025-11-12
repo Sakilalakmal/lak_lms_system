@@ -38,6 +38,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapters, reorderLessons } from "../action";
+import { NewChapterModel } from "./NewChapterModel";
 
 interface CourseStructureProps {
   data: AdminSingleCourseType;
@@ -285,7 +286,8 @@ export function CourseStructure({ data }: CourseStructureProps) {
     >
       <Card>
         <CardHeader className="flex items-center flex-row justify-between border-b border-border">
-          <CardTitle>Chapters</CardTitle>
+          <CardTitle>Chapters </CardTitle>
+          <NewChapterModel courseId={data.id} />
         </CardHeader>
         <CardContent className="space-y-8">
           <SortableContext strategy={verticalListSortingStrategy} items={items}>
