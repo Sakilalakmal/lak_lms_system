@@ -5,6 +5,8 @@ import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/prisma";
 import { ApiResponse } from "@/lib/types";
 import {
+  chapterSchema,
+  ChapterSchemaType,
   courseInputSchema,
   CourseInputType,
   courseSchema,
@@ -185,6 +187,54 @@ export async function reorderChapters(
     return {
       status: "error",
       message: "Failed to reorder chapters",
+    };
+  }
+}
+
+export async function CreateChapter(
+  values: ChapterSchemaType
+): Promise<ApiResponse> {
+  await requireAdmin();
+  try {
+    const result = chapterSchema.safeParse(values);
+
+    if (!result.success) {
+      console.log("Chapter validation failed:", result.error.issues);
+      return {
+        status: "error",
+        message: "Invalid chapter data",
+      };
+    }
+
+    //create a new chapter
+    await prisma.$transaction(async (tx) => {
+      const maxPos = tx.chapter.findFirst({
+        where: { courseId: values.courseId },
+        orderBy: { position: "desc" },
+        select: { position: true },
+      });
+
+      await tx.chapter.create({
+        data: {
+          title: result.data.name,
+          courseId: result.data.courseId,
+          position: ((await maxPos)?.position ?? 0) + 1,
+        },
+      });
+    });
+
+    revalidatePath(`/admin/courses/${values.courseId}/edit`);
+
+    return {
+      status: "success",
+      message: "Chapter created successfully",
+    };
+  } catch (error) {
+    console.log("failed to create a chapter");
+
+    return {
+      status: "error",
+      message: "Failed to create chapter",
     };
   }
 }
