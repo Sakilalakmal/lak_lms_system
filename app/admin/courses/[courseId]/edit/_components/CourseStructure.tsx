@@ -17,7 +17,7 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
 import { listeners, title } from "process";
@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { reorderChapters, reorderLessons } from "../action";
 
 interface CourseStructureProps {
   data: AdminSingleCourseType;
@@ -67,6 +68,25 @@ export function CourseStructure({ data }: CourseStructureProps) {
       })), //default chapter open
     })) || [];
   const [items, setItems] = useState(initalItems);
+
+  useEffect(() => {
+    setItems((prev) => {
+      const updatedItems =
+        data.chapter.map((chapter) => ({
+          id: chapter.id,
+          title: chapter.title,
+          order: chapter.position,
+          isOpen: prev.find((item) => item.id === chapter.id)?.isOpen ?? true,
+          lessons: chapter.lesson.map((lesson) => ({
+            id: lesson.id,
+            title: lesson.title,
+            order: lesson.position,
+          })),
+        })) || [];
+
+      return updatedItems;
+    });
+  }, [data]);
 
   function SortableItem({ children, id, className, data }: SortableItemProps) {
     const {
@@ -141,6 +161,29 @@ export function CourseStructure({ data }: CourseStructureProps) {
       const previousItems = [...items];
 
       setItems(updatedChapterForState);
+
+      if (courseId) {
+        const chaptersToUpdate = updatedChapterForState.map((chapter) => ({
+          id: chapter.id,
+          position: chapter.order,
+        }));
+
+        const reorderChaptersPromise = () =>
+          reorderChapters(courseId, chaptersToUpdate);
+        toast.promise(reorderChaptersPromise(), {
+          loading: "Reordering chapters...",
+          success: (result) => {
+            if (result.status === "success") return result.message;
+            throw new Error(result.message);
+          },
+          error: () => {
+            setItems(previousItems);
+            return "Failed to reorder chapters.";
+          },
+        });
+      }
+
+      return;
     }
 
     if (activeType === "lesson" && overType === "lesson") {
@@ -191,6 +234,29 @@ export function CourseStructure({ data }: CourseStructureProps) {
 
       const previousItems = [...items];
       setItems(newItems);
+
+      if (courseId) {
+        const lessonsToUpdate = updatedLessonsForState.map((lesson) => ({
+          id: lesson.id,
+          position: lesson.order,
+        }));
+
+        const reorderLessonPromise = () =>
+          reorderLessons(chapterId, lessonsToUpdate, courseId);
+        toast.promise(reorderLessonPromise(), {
+          loading: "Reordering lessons...",
+          success: (result) => {
+            if (result.status === "success") return result.message;
+            throw new Error(result.message);
+          },
+          error: () => {
+            setItems(previousItems);
+            return "Failed to reorder lessons.";
+          },
+        });
+      }
+
+      return;
     }
   }
 
@@ -221,7 +287,7 @@ export function CourseStructure({ data }: CourseStructureProps) {
         <CardHeader className="flex items-center flex-row justify-between border-b border-border">
           <CardTitle>Chapters</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-8">
           <SortableContext strategy={verticalListSortingStrategy} items={items}>
             {items.map((item) => (
               <SortableItem
