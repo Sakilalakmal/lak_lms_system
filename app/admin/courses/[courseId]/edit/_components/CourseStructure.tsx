@@ -39,6 +39,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapters, reorderLessons } from "../action";
 import { NewChapterModel } from "./NewChapterModel";
+import { NewLessionModel } from "./NewlessionModel";
+import { DeleteLessons } from "./DeleteLessons";
 
 interface CourseStructureProps {
   data: AdminSingleCourseType;
@@ -364,18 +366,21 @@ export function CourseStructure({ data }: CourseStructureProps) {
                                       </Link>
                                     </div>
 
-                                    <Button variant={"destructive"}>
-                                      <Trash2Icon className="size-4" />
-                                    </Button>
+                                    <DeleteLessons
+                                      chapterId={item.id}
+                                      courseId={data.id}
+                                      lessonId={lesson.id}
+                                    />
                                   </div>
                                 )}
                               </SortableItem>
                             ))}
                           </SortableContext>
                           <div className="p-2">
-                            <Button variant={"outline"} className="w-full">
-                              Create New Lesson
-                            </Button>
+                            <NewLessionModel
+                              courseId={data.id}
+                              chapterId={item.id}
+                            />
                           </div>
                         </div>
                       </CollapsibleContent>
