@@ -74,6 +74,10 @@ export function NewLessionModel({
   }
 
   function handleOpenChange(open: boolean) {
+    if (!open) {
+      form.reset();
+    }
+
     setIsOpen(open);
   }
 

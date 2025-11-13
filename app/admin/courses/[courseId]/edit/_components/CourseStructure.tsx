@@ -41,6 +41,7 @@ import { reorderChapters, reorderLessons } from "../action";
 import { NewChapterModel } from "./NewChapterModel";
 import { NewLessionModel } from "./NewlessionModel";
 import { DeleteLessons } from "./DeleteLessons";
+import { DeleteChapter } from "./DeleteChapter";
 
 interface CourseStructureProps {
   data: AdminSingleCourseType;
@@ -331,9 +332,7 @@ export function CourseStructure({ data }: CourseStructureProps) {
                           </p>
                         </div>
 
-                        <Button>
-                          <Trash2Icon className="size-4 text-destructive" />
-                        </Button>
+                        <DeleteChapter chapterId={item.id} courseId={data.id} />
                       </div>
 
                       <CollapsibleContent>
