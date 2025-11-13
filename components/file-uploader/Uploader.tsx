@@ -306,7 +306,8 @@ export function Uploader({
       fileTypeShouldbe === "video" ? { "video/*": [] } : { "image/*": [] },
     maxFiles: 1,
     multiple: false,
-    maxSize: 5 * 1024 * 1024,
+    maxSize:
+      fileTypeShouldbe === "video" ? 3000 * 1024 * 1024 : 5 * 1024 * 1024,
     onDropRejected: rejectedFiles,
     disabled: fileState.uploading || !!fileState.objectUrl,
     // 5MB

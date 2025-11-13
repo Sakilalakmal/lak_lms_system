@@ -20,11 +20,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { tryCatch } from "@/hooks/try-catch";
 import { lessonSchema, LessonSchemaType } from "@/lib/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Book, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { UpdateLesson } from "../actions";
+import { toast } from "sonner";
 
 interface LessonFormProps {
   data: AdminLessonType;
@@ -33,6 +37,7 @@ interface LessonFormProps {
 }
 
 export function LessonEditForm({ data, chapterId, courseId }: LessonFormProps) {
+  const [isPending, startTransition] = useTransition();
   //define form for validation
   const form = useForm<LessonSchemaType>({
     resolver: zodResolver(lessonSchema),
@@ -45,6 +50,26 @@ export function LessonEditForm({ data, chapterId, courseId }: LessonFormProps) {
       thumbnailKey: data.thumbnailKey ?? "",
     },
   });
+
+  function onSubmit(values: LessonSchemaType) {
+    startTransition(async () => {
+      const { data: result, error } = await tryCatch(
+        UpdateLesson(values, data.id)
+      );
+
+      if (error) {
+        toast.error("Something went wrong. Please try again.");
+        return;
+      }
+
+      if (result?.status === "success") {
+        toast.success(result.message);
+        form.reset();
+      } else if (result?.status === "error") {
+        toast.error(result.message);
+      }
+    });
+  }
 
   return (
     <div>
@@ -67,7 +92,7 @@ export function LessonEditForm({ data, chapterId, courseId }: LessonFormProps) {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="space-y-8">
+            <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="name"
@@ -132,7 +157,19 @@ export function LessonEditForm({ data, chapterId, courseId }: LessonFormProps) {
                 )}
               />
 
-              <Button type="submit">Save Lesson</Button>
+              <Button disabled={isPending} type="submit">
+                {isPending ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Saving ...
+                  </>
+                ) : (
+                  <>
+                    <Book className="size-4" />
+                    save lesson
+                  </>
+                )}
+              </Button>
             </form>
           </Form>
         </CardContent>
