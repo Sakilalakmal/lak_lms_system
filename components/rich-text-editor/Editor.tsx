@@ -5,6 +5,21 @@ import { MenuBar } from "./Menu-Bar";
 import TextAlign from "@tiptap/extension-text-align";
 
 export function RichTextEditor({ field }: { field: any }) {
+  // Helper function to safely parse content
+  const getInitialContent = () => {
+    if (!field.value) {
+      return "<p> start typing here ....</p>";
+    }
+
+    try {
+      // Try to parse as JSON first (Tiptap format)
+      return JSON.parse(field.value);
+    } catch (error) {
+      // If parsing fails, treat as plain text and wrap in paragraph
+      return `<p>${field.value}</p>`;
+    }
+  };
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -22,7 +37,7 @@ export function RichTextEditor({ field }: { field: any }) {
     onUpdate: ({ editor }) => {
       field.onChange(JSON.stringify(editor.getJSON()));
     },
-    content: field.value ? JSON.parse(field.value) : "<p> start typing here ....</p>",
+    content: getInitialContent(),
     immediatelyRender: false,
   });
 

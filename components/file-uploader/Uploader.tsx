@@ -30,9 +30,14 @@ interface UploaderProps {
 interface courseImageUploadProps {
   value?: string;
   onChange?: (value: string) => void;
+  fileTypeShouldbe: "image" | "video";
 }
 
-export function Uploader({ value, onChange }: courseImageUploadProps) {
+export function Uploader({
+  value,
+  onChange,
+  fileTypeShouldbe,
+}: courseImageUploadProps) {
   const fileUrl = useConstructUrl(value || "");
 
   const [fileState, setFileState] = useState<UploaderProps>({
@@ -42,9 +47,9 @@ export function Uploader({ value, onChange }: courseImageUploadProps) {
     uploading: false,
     progress: 0,
     isDeleting: false,
-    fileType: "image",
+    fileType: fileTypeShouldbe,
     key: value,
-    objectUrl: fileUrl,
+    objectUrl: value ? fileUrl : undefined,
   });
 
   async function uploadFile(file: File) {
@@ -65,7 +70,7 @@ export function Uploader({ value, onChange }: courseImageUploadProps) {
           fileName: file.name,
           contentType: file.type,
           size: file.size,
-          isImage: true,
+          isImage: fileTypeShouldbe === "image" ? true : false,
         }),
       });
 
@@ -173,13 +178,13 @@ export function Uploader({ value, onChange }: courseImageUploadProps) {
           error: false,
           id: uuidv4(),
           isDeleting: false,
-          fileType: "image",
+          fileType: fileTypeShouldbe,
         });
 
         uploadFile(file);
       }
     },
-    [fileState.objectUrl]
+    [fileState.objectUrl, uploadFile, fileTypeShouldbe]
   );
 
   async function handleRemoveFile() {
@@ -223,7 +228,7 @@ export function Uploader({ value, onChange }: courseImageUploadProps) {
         id: null,
         isDeleting: false,
         error: false,
-        fileType: "image",
+        fileType: fileTypeShouldbe,
       }));
 
       toast.success("File removed successfully.");
@@ -279,6 +284,7 @@ export function Uploader({ value, onChange }: courseImageUploadProps) {
           handleRemove={handleRemoveFile}
           isDeleting={fileState.isDeleting}
           previewUrl={fileState.objectUrl!}
+          fileType={fileState.fileType}
         />
       );
     }
@@ -296,10 +302,11 @@ export function Uploader({ value, onChange }: courseImageUploadProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "image/*": [] },
+    accept:
+      fileTypeShouldbe === "video" ? { "video/*": [] } : { "image/*": [] },
     maxFiles: 1,
     multiple: false,
-    maxSize: 2 * 1024 * 1024,
+    maxSize: 5 * 1024 * 1024,
     onDropRejected: rejectedFiles,
     disabled: fileState.uploading || !!fileState.objectUrl,
     // 5MB
