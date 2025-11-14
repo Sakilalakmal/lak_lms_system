@@ -17,12 +17,18 @@ import {
   IconClock,
   IconPlayerPlay,
 } from "@tabler/icons-react";
-import { CheckIcon, LucideWatch, WatchIcon } from "lucide-react";
+import {
+  CheckIcon,
+  LucideWatch,
+  PlayCircleIcon,
+  WatchIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { EnrollInCourseAction } from "./actions";
 import { checkIfAlreadyBaughtCourse } from "@/app/data/user/user-is-enrolled";
 import Link from "next/link";
 import { EnrollmentButton } from "./_components/enrollmentButton";
+import { buttonVariants } from "@/components/ui/button";
 
 type params = Promise<{ slug: string }>;
 
@@ -279,7 +285,15 @@ export default async function SlugPageDetails({ params }: { params: params }) {
 
               {isEnrolled ? (
                 <>
-                  <Link href={"/dashboard"}>Watch Now</Link>
+                  <Link
+                    className={buttonVariants({
+                      className: "w-full",
+                    })}
+                    href={"/dashboard"}
+                  >
+                    <PlayCircleIcon className="size-4" />
+                    Watch Now
+                  </Link>
                 </>
               ) : (
                 <>
