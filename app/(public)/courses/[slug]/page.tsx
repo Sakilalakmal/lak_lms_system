@@ -1,7 +1,6 @@
 import { getIndividualCourse } from "@/app/data/course/get-course";
 import { RenderDescription } from "@/components/rich-text-editor/renderDescription";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Collapsible,
@@ -20,12 +19,18 @@ import {
 } from "@tabler/icons-react";
 import { CheckIcon, LucideWatch, WatchIcon } from "lucide-react";
 import Image from "next/image";
+import { EnrollInCourseAction } from "./actions";
+import { checkIfAlreadyBaughtCourse } from "@/app/data/user/user-is-enrolled";
+import Link from "next/link";
+import { EnrollmentButton } from "./_components/enrollmentButton";
 
 type params = Promise<{ slug: string }>;
 
 export default async function SlugPageDetails({ params }: { params: params }) {
   const { slug } = await params;
   const course = await getIndividualCourse(slug);
+
+  const isEnrolled = await checkIfAlreadyBaughtCourse(course.id);
 
   // Direct URL construction
   const thumbnailUrl = course.fileKey
@@ -272,7 +277,15 @@ export default async function SlugPageDetails({ params }: { params: params }) {
                 </ul>
               </div>
 
-              <Button className="w-full">Enroll Now</Button>
+              {isEnrolled ? (
+                <>
+                  <Link href={"/dashboard"}>Watch Now</Link>
+                </>
+              ) : (
+                <>
+                  <EnrollmentButton courseId={course.id} />
+                </>
+              )}
               <p className="mt-3 text-center text-xs text-muted-foreground">
                 30-day money-back guarantee
               </p>
