@@ -4,6 +4,7 @@ import { requireAdmin } from "@/app/data/admin/require-admin";
 import arcjet, { fixedWindow } from "@/lib/arcjet";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { stripe } from "@/lib/stripe";
 import { ApiResponse } from "@/lib/types";
 import {
   CourseInputType,
@@ -11,6 +12,7 @@ import {
   courseInputSchema,
 } from "@/lib/zodSchema";
 import { request } from "@arcjet/next";
+import { log } from "console";
 
 import { headers } from "next/headers";
 
@@ -79,20 +81,50 @@ export async function createCourseAction(
       headers: await headers(),
     });
 
-    const data = await prisma.course.create({
+    // Create Stripe product with price
+    const stripeProduct = await stripe.products.create({
+      name: finalValidation.data.title,
+      description: finalValidation.data.smallDescription,
+      default_price_data: {
+        currency: "usd",
+        unit_amount: finalValidation.data.price * 100,
+      },
+    });
+
+    console.log("Stripe product created:", stripeProduct.id);
+    console.log("Stripe price ID:", stripeProduct.default_price);
+
+    // Create course in database
+    const course = await prisma.course.create({
       data: {
         ...finalValidation.data,
         userId: session?.user?.id!,
+        stripePriceId: stripeProduct.default_price as string,
       },
     });
+
+    console.log("Course created successfully:", course.id);
 
     return {
       status: "success",
       message: "Course created successfully",
     };
   } catch (error) {
+    console.error("❌ Error creating course:");
+    console.error("Error name:", (error as Error).name);
+    console.error("Error message:", (error as Error).message);
+    console.error("Full error:", error);
+
+    if (error instanceof Error && error.message.includes("stripePriceId")) {
+      return {
+        message:
+          "Database schema issue with stripePriceId field. Please regenerate Prisma client.",
+        status: "error",
+      };
+    }
+
     return {
-      message: "Failed to create course",
+      message: `Failed to create course: ${(error as Error).message}`,
       status: "error",
     };
   }

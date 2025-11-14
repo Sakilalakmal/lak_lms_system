@@ -1,7 +1,7 @@
 "use server";
 
 import { requireAdmin } from "@/app/data/admin/require-admin";
-import arcjet, {  fixedWindow } from "@/lib/arcjet";
+import arcjet, { fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/prisma";
 import { ApiResponse } from "@/lib/types";
 import {
@@ -18,14 +18,13 @@ import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 import { Pridi } from "next/font/google";
 
-const aj = arcjet
-  .withRule(
-    fixedWindow({
-      mode: "LIVE",
-      window: "1m",
-      max: 5,
-    })
-  );
+const aj = arcjet.withRule(
+  fixedWindow({
+    mode: "LIVE",
+    window: "1m",
+    max: 5,
+  })
+);
 
 export async function editCourse(
   data: CourseInputType,
