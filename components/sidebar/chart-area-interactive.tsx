@@ -26,12 +26,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface ChartAreaInteractiveProps {
-  data: { date: string; enrollment: number }[];
+  data: { date: string; enrollments: number }[];
 }
 
 export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
   const totalEnrollNumbers = useMemo(
-    () => data.reduce((acc, curr) => acc + curr.enrollment, 0),
+    () => data.reduce((acc, curr) => acc + curr.enrollments, 0),
     [data]
   );
 
@@ -67,13 +67,19 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              interval={"preserveStartEnd"}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+              interval={0}
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value, index) => {
+                // Only show ticks for dates with enrollments > 0
+                const dataPoint = data[index];
+                if (dataPoint && dataPoint.enrollments > 0) {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  });
+                }
+                return "";
               }}
             />
 

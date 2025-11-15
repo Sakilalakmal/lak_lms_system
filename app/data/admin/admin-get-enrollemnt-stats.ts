@@ -21,7 +21,7 @@ export async function adminGetEnrollmentData() {
     },
   });
 
-  const last30days: { date: string; enrollment: number }[] = [];
+  const last30days: { date: string; enrollments: number }[] = [];
 
   for (let i = 29; i >= 0; i--) {
     const date = new Date();
@@ -29,7 +29,7 @@ export async function adminGetEnrollmentData() {
 
     last30days.push({
       date: date.toISOString().split("T")[0],
-      enrollment: 0,
+      enrollments: 0,
     });
   }
 
@@ -37,7 +37,7 @@ export async function adminGetEnrollmentData() {
     const enrollmentDate = enrollment.createdAt.toISOString().split("T")[0];
     const dayStat = last30days.find((day) => day.date === enrollmentDate);
     if (dayStat) {
-      dayStat.enrollment += 1;
+      dayStat.enrollments += 1;
     }
   });
 
