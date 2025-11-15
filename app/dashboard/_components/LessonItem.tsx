@@ -11,11 +11,16 @@ interface LessonItemProps {
     description: string | null;
   };
   slug: string;
+  isActive?: boolean;
+  completed: boolean;
 }
 
-export function LessonItem({ lesson, slug }: LessonItemProps) {
-  const completed = true;
-
+export function LessonItem({
+  lesson,
+  slug,
+  isActive,
+  completed,
+}: LessonItemProps) {
   return (
     <Link
       href={`/dashboard/${slug}/${lesson.id}`}
@@ -24,7 +29,10 @@ export function LessonItem({ lesson, slug }: LessonItemProps) {
         className: cn(
           "w-full p-2.5 h-auto justify-start transition-all",
           completed &&
-            "bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-900/50 text-green-800 dark:text-green-200"
+            "bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-900/50 text-green-800 dark:text-green-200",
+          isActive &&
+            !completed &&
+            "bg-blue-200 dark:bg-blue-200 border-primary/50"
         ),
       })}
     >
@@ -40,7 +48,12 @@ export function LessonItem({ lesson, slug }: LessonItemProps) {
                 "size-6 rounded-full border-2 bg-background flex justify-center items-center"
               )}
             >
-              <PlayIcon className={cn("size-2.5 fill-current")} />
+              <PlayIcon
+                className={cn(
+                  "size-2.5 fill-current",
+                  isActive ? "text-primary" : "text-muted-foreground"
+                )}
+              />
             </div>
           )}
         </div>
@@ -49,7 +62,11 @@ export function LessonItem({ lesson, slug }: LessonItemProps) {
           <p
             className={cn(
               "text-xs font-medium truncate",
-              completed && "text-green-800 dark:text-green-200"
+              completed
+                ? "text-green-800 dark:text-green-200"
+                : isActive
+                ? "text-primary font-semibold "
+                : "text-muted-foreground"
             )}
           >
             {lesson.position}. {lesson.title}
@@ -57,6 +74,12 @@ export function LessonItem({ lesson, slug }: LessonItemProps) {
           {completed && (
             <p className="text-[10px] text-xs text-green-700 darl:text-green-300 font-medium mt-1">
               Completed
+            </p>
+          )}
+
+          {isActive && !completed && (
+            <p className="text-[10px] text-primary font-medium">
+              Currently watching...
             </p>
           )}
         </div>
