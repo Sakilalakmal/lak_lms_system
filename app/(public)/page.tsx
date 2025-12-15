@@ -6,7 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ModeToggle } from "@/components/ui/themeToggle";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
-
+import { PictureSection } from "./_components/Picture-Section";
+import { HeroImageSection } from "./_components/HeroImageSection";
+import { TechStackSection } from "./_components/TechStackSection";
 
 interface featureProps {
   title: string;
@@ -42,16 +44,14 @@ const features: featureProps[] = [
 ];
 
 export default function Home() {
-
-
   return (
     <>
-      <section className="relative py-20">
+      <section className="relative py-8">
         <div className="flex flex-col items-center text-center space-y-8">
           <Badge variant={"outline"}>
             The Sri Lankan Future of online Education
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold">
+          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-violet-500">
             Elevate Your Learning Experience
           </h1>
           <p className="text-muted-foreground max-w-[700px] md:text-xl">
@@ -60,7 +60,7 @@ export default function Home() {
             anywhere.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 mt-8">
+          <div className="flex flex-col sm:flex-row gap-4 mt-6">
             <Link
               className={buttonVariants({
                 size: "lg",
@@ -82,6 +82,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <HeroImageSection />
+      <TechStackSection/>
+      <PictureSection />
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map((feature, index) => (

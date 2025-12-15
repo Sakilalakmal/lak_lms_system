@@ -11,8 +11,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useConstructUrl } from "@/hooks/use-contruct";
 import {
-  Edit2,
-  Edit2Icon,
   Edit3,
   Eye,
   MoreVerticalIcon,
@@ -90,7 +88,7 @@ export function AdminCourseCard({ data }: adminTypes) {
       />
       <CardContent className="p-4">
         <Link
-          href={`/admin/courses/${data.id}`}
+          href={`/courses/${data.slug}`}
           className="font-medium text-lg line-clamp-2 hover:underline hover:text-primary transition-colors"
         >
           {data.title}
