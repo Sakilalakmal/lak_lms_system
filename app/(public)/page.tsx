@@ -9,11 +9,19 @@ import Link from "next/link";
 import { PictureSection } from "./_components/Picture-Section";
 import { HeroImageSection } from "./_components/HeroImageSection";
 import { TechStackSection } from "./_components/TechStackSection";
+import {
+  Book,
+  GitGraph,
+  GraduationCap,
+  LucideProps,
+  Phone,
+} from "lucide-react";
+import React from "react";
 
 interface featureProps {
   title: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<LucideProps>;
 }
 
 const features: featureProps[] = [
@@ -21,25 +29,25 @@ const features: featureProps[] = [
     title: "Comprehensive Course Management",
     description:
       "Easily create, organize, and manage courses with our intuitive course management tools.",
-    icon: "📚",
+    icon: Book,
   },
   {
     title: "Interactive Learning Experience",
     description:
       "Engage students with multimedia content, quizzes, and assignments to enhance their learning experience.",
-    icon: "🎓",
+    icon: GraduationCap,
   },
   {
     title: "Progress Tracking and Analytics",
     description:
       "Monitor student progress and performance with detailed analytics and reporting features.",
-    icon: "📈",
+    icon: GitGraph,
   },
   {
     title: "Seamless Communication",
     description:
       "Facilitate communication between instructors and students through messaging and discussion forums.",
-    icon: "💏",
+    icon: Phone,
   },
 ];
 
@@ -51,7 +59,7 @@ export default function Home() {
           <Badge variant={"outline"}>
             The Sri Lankan Future of online Education
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-violet-500">
+          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
             Elevate Your Learning Experience
           </h1>
           <p className="text-muted-foreground max-w-[700px] md:text-xl">
@@ -84,21 +92,32 @@ export default function Home() {
       </section>
 
       <HeroImageSection />
-      <TechStackSection/>
+      <TechStackSection />
       <PictureSection />
 
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {features.map((feature, index) => (
-          <Card key={index} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="text-4xl mb-4">{feature.icon}</div>
-              <CardTitle>{feature.title}</CardTitle>
-              <CardContent>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </CardHeader>
-          </Card>
-        ))}
+      <section className="mt-32">
+        <h2 className="text-center text-4xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
+          Features
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature, index) => (
+            <Card key={index} className="hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-start gap-4 space-y-0">
+                <div className="p-3 rounded-lg bg-linear-to-r from-blue-500 to-violet-500 flex items-center justify-center shrink-0">
+                  <feature.icon className="h-6 w-6 text-white" />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <CardTitle className="text-lg">{feature.title}</CardTitle>
+                  <CardContent className="p-0">
+                    <p className="text-sm text-muted-foreground">
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                </div>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
       </section>
     </>
   );
