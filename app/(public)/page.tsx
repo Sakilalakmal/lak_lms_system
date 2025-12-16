@@ -1,10 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ModeToggle } from "@/components/ui/themeToggle";
-import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { PictureSection } from "./_components/Picture-Section";
 import { HeroImageSection } from "./_components/HeroImageSection";
@@ -17,6 +14,7 @@ import {
   Phone,
 } from "lucide-react";
 import React from "react";
+import { buttonVariants } from "@/components/ui/button";
 
 interface featureProps {
   title: string;
@@ -59,7 +57,7 @@ export default function Home() {
           <Badge variant={"outline"}>
             The Sri Lankan Future of online Education
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
+          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-violet-500">
             Elevate Your Learning Experience
           </h1>
           <p className="text-muted-foreground max-w-[700px] md:text-xl">
@@ -96,7 +94,7 @@ export default function Home() {
       <PictureSection />
 
       <section className="mt-32">
-        <h2 className="text-center text-4xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
+        <h2 className="text-center text-4xl font-bold mb-12 bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-violet-500">
           Features
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

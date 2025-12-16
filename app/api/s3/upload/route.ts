@@ -30,9 +30,14 @@ const aj = arcjet
 
 export async function POST(request: Request) {
   const session = await requireAdmin();
+  
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  
   try {
     const decision = await aj.protect(request, {
-      fingerprint: session?.user?.id!,
+      fingerprint: session.user.id,
     });
 
     if (decision.isDenied()) {
