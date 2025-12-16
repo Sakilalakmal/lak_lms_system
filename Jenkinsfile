@@ -11,21 +11,21 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                bat 'pnpm install --frozen-lockfile'
+                bat 'npx pnpm install --frozen-lockfile'
             }
         }
         
         stage('Lint') {
             steps {
                 echo 'Linting code...'
-                bat 'pnpm run lint'
+                bat 'npm run lint'
             }
         }
         
         stage('Build') {
             steps {
                 echo 'Building Next.js application...'
-                bat 'pnpm run build'
+                bat 'npx pnpm run build'
             }
         }
 

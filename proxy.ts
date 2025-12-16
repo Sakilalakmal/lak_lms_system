@@ -26,7 +26,7 @@ const aj = arcjet({
   ],
 });
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
 
   if (!sessionCookie) {
@@ -39,7 +39,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // matcher tells Next.js which routes to run the middleware on.
   // This runs the middleware on all routes except for static assets and webhooks.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/auth|api/webhook).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|api/auth|api/webhook).*)",
+  ],
 };
 
 // Pass any existing middleware with the optional existingMiddleware prop
