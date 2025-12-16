@@ -35,7 +35,7 @@ export async function editCourse(
   try {
     const req = await request();
     const decision = await aj.protect(req, {
-      fingerprint: user?.user?.id!,
+      fingerprint: user?.user?.id,
     });
 
     if (decision.isDenied()) {

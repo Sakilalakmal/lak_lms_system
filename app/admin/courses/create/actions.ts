@@ -31,7 +31,7 @@ export async function createCourseAction(
   try {
     const req = await request();
     const decision = await aj.protect(req, {
-      fingerprint: Usersession?.user?.id!,
+      fingerprint: Usersession?.user?.id,
     });
 
     if (decision.isDenied()) {
@@ -98,7 +98,7 @@ export async function createCourseAction(
     const course = await prisma.course.create({
       data: {
         ...finalValidation.data,
-        userId: session?.user?.id!,
+        userId: session?.user?.id,
         stripePriceId: stripeProduct.default_price as string,
       },
     });

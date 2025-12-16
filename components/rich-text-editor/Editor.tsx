@@ -3,8 +3,13 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { MenuBar } from "./Menu-Bar";
 import TextAlign from "@tiptap/extension-text-align";
+import { ControllerRenderProps, FieldValues } from "react-hook-form";
 
-export function RichTextEditor({ field }: { field: any }) {
+export function RichTextEditor({
+  field,
+}: {
+  field: ControllerRenderProps<FieldValues, string>;
+}) {
   // Helper function to safely parse content
   const getInitialContent = () => {
     if (!field.value) {

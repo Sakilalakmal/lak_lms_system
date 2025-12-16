@@ -1,10 +1,23 @@
 "use client";
 
-import { CourseSidebarData } from "@/app/data/course/get-course-sidebar-data";
 import { useMemo } from "react";
 
+// Generic interface that works with both CourseSidebarData and EnrolledCoursesType
+export interface CourseWithProgress {
+  chapter: {
+    id: string;
+    lesson: {
+      id: string;
+      lessonProgress?: {
+        completed: boolean;
+        lessonId: string;
+      }[];
+    }[];
+  }[];
+}
+
 interface AppProps {
-  courseData: CourseSidebarData["course"];
+  courseData: CourseWithProgress;
 }
 
 interface CourseProgress {
