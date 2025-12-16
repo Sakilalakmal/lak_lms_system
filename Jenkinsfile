@@ -5,6 +5,9 @@ pipeline {
     
     environment {
         GITHUB_TOKEN = credentials('LMS_TOKEN')
+        // Skip environment variable validation during CI build
+        // The app will validate env vars at runtime when deployed
+        SKIP_ENV_VALIDATION = 'true'
     }
     
     stages {
