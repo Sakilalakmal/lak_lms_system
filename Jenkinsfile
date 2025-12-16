@@ -42,7 +42,7 @@ pipeline {
                         curl -X PUT ^
                         -H "Authorization: token %GITHUB_TOKEN%" ^
                         -H "Accept: application/vnd.github.v3+json" ^
-                        https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO_NAME/pulls/%CHANGE_ID%/merge ^
+                        https://api.github.com/repos/Sakilalakmal/lak_lms_system/pulls/%CHANGE_ID%/merge ^
                         -d "{\\"commit_title\\":\\"Auto-merge PR #%CHANGE_ID%\\",\\"merge_method\\":\\"merge\\"}"
                     """
                 }
