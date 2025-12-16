@@ -4,7 +4,7 @@ pipeline {
     agent any
     
     environment {
-        GITHUB_TOKEN = credentials('GABBER_TOKEN')
+        GITHUB_TOKEN = credentials('LMS_TOKEN')
     }
     
     stages {

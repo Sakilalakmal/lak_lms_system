@@ -1,6 +1,5 @@
 "use client";
 
-import { AllPublicCoursesType } from "@/app/data/course/get-all-course";
 import { EnrolledCoursesType } from "@/app/data/user/get-enrolled-courses";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -8,7 +7,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useConstructUrl } from "@/hooks/use-contruct";
 import { useCourseProgress } from "@/hooks/use-course-progress";
-import { School2Icon, TimerIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,7 +17,7 @@ interface PublicCourseCardProps {
 export function CourseProgressCard({ data }: PublicCourseCardProps) {
   const thumbnailUrl = useConstructUrl(data.Course.fileKey || "");
   const { totalLessons, progressPercentage, completedLessons } =
-    useCourseProgress({ courseData: data.Course as any });
+    useCourseProgress({ courseData: data.Course });
 
   return (
     <Card className="group relative py-0 gap-0">

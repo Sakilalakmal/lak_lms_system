@@ -7,7 +7,6 @@ import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { ApiResponse } from "@/lib/types";
 import { request } from "@arcjet/next";
-import { redirect } from "next/navigation";
 import Stripe from "stripe";
 
 const aj = arcjet.withRule(
@@ -25,7 +24,7 @@ export async function EnrollInCourseAction(
     const user = await requireUser();
     const req = await request();
     const decision = await aj.protect(req, {
-      fingerprint: user?.id!,
+      fingerprint: user?.id,
     });
 
     if (decision.isDenied()) {
@@ -182,7 +181,7 @@ export async function EnrollInCourseAction(
     };
   } catch (error) {
     console.error("Enrollment error:", error);
-    
+
     if (error instanceof Stripe.errors.StripeError) {
       return {
         status: "error",

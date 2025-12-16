@@ -20,7 +20,7 @@ export async function DELETE(request: Request) {
   const session = await requireAdmin();
   try {
     const decision = await aj.protect(request, {
-      fingerprint: session?.user?.id!,
+      fingerprint: session?.user?.id,
     });
 
     if (decision.isDenied()) {

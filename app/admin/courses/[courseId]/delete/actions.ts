@@ -22,7 +22,7 @@ export async function deleteCourse(courseId: string): Promise<ApiResponse> {
   try {
     const req = await request();
     const decision = await aj.protect(req, {
-      fingerprint: Usersession?.user?.id!,
+      fingerprint: Usersession?.user?.id,
     });
 
     if (decision.isDenied()) {
