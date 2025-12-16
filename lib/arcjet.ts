@@ -19,14 +19,28 @@ export {
   slidingWindow,
 };
 
-export default arcjet({
-  key: env.ARCJET_KEY,
-  characteristics: ["fingerprint"],
+// Lazy-loaded Arcjet client to avoid initialization during build
+let arcjetInstance: ReturnType<typeof arcjet> | null = null;
 
-  //define base rules here
-  rules: [
-    shield({
-      mode: "LIVE",
-    }),
-  ],
+function getArcjetInstance() {
+  if (!arcjetInstance) {
+    arcjetInstance = arcjet({
+      key: env.ARCJET_KEY,
+      characteristics: ["fingerprint"],
+      rules: [
+        shield({
+          mode: "LIVE",
+        }),
+      ],
+    });
+  }
+  return arcjetInstance;
+}
+
+const arcjetProxy = new Proxy({} as ReturnType<typeof arcjet>, {
+  get(_target, prop) {
+    return getArcjetInstance()[prop as keyof ReturnType<typeof arcjet>];
+  },
 });
+
+export default arcjetProxy;
