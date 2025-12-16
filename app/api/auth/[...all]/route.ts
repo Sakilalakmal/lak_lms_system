@@ -1,6 +1,5 @@
 import arcjet from "@/lib/arcjet";
 import { auth } from "@/lib/auth";
-import { env } from "@/lib/env";
 import ip from "@arcjet/ip";
 import {
   type ArcjetDecision,
@@ -10,7 +9,6 @@ import {
   type SlidingWindowRateLimitOptions,
   detectBot,
   protectSignup,
-  shield,
   slidingWindow,
 } from "@arcjet/next";
 import { toNextJsHandler } from "better-auth/next-js";
@@ -69,21 +67,22 @@ async function protect(req: NextRequest): Promise<ArcjetDecision> {
     // the email validation checks as well. See
     // https://www.better-auth.com/docs/concepts/hooks#example-enforce-email-domain-restriction
     if (typeof body.email === "string") {
-      return arcjet
-        .withRule(protectSignup(signupOptions))
-        .protect(req, { email: body.email, fingerprint: userId });
+      const aj = arcjet.withRule(protectSignup(signupOptions));
+      // @ts-ignore
+      return aj.protect(req, { email: body.email, fingerprint: userId });
     } else {
       // Otherwise use rate limit and detect bot
-      return arcjet
+      const aj = arcjet
         .withRule(detectBot(botOptions))
-        .withRule(slidingWindow(rateLimitOptions))
-        .protect(req, { fingerprint: userId });
+        .withRule(slidingWindow(rateLimitOptions));
+      // @ts-ignore
+      return aj.protect(req, { fingerprint: userId });
     }
   } else {
     // For all other auth requests
-    return arcjet
-      .withRule(detectBot(botOptions))
-      .protect(req, { fingerprint: userId });
+    const aj = arcjet.withRule(detectBot(botOptions));
+    // @ts-ignore
+    return aj.protect(req, { fingerprint: userId });
   }
 }
 

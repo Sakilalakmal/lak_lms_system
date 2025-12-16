@@ -7,20 +7,20 @@ import { ApiResponse } from "@/lib/types";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
-const aj = arcjet
-  .withRule(
-    fixedWindow({
-      mode: "LIVE",
-      window: "1m",
-      max: 5,
-    })
-  );
+const aj = arcjet.withRule(
+  fixedWindow({
+    mode: "LIVE",
+    window: "1m",
+    max: 5,
+  })
+);
 
 export async function deleteCourse(courseId: string): Promise<ApiResponse> {
   const Usersession = await requireAdmin();
 
   try {
     const req = await request();
+    // @ts-expect-error - Arcjet withRule() typing issue in beta version
     const decision = await aj.protect(req, {
       fingerprint: Usersession?.user?.id,
     });

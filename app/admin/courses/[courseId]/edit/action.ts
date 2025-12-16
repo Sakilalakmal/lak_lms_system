@@ -34,6 +34,7 @@ export async function editCourse(
 
   try {
     const req = await request();
+    // @ts-expect-error - Arcjet withRule() typing issue in beta version
     const decision = await aj.protect(req, {
       fingerprint: user?.user?.id,
     });

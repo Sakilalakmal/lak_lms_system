@@ -1,6 +1,6 @@
 import "server-only";
 
-import arcjet, {
+import arcjetLib, {
   detectBot,
   protectSignup,
   sensitiveInfo,
@@ -20,11 +20,11 @@ export {
 };
 
 // Lazy-loaded Arcjet client to avoid initialization during build
-let arcjetInstance: ReturnType<typeof arcjet> | null = null;
+let arcjetInstance: ReturnType<typeof arcjetLib> | null = null;
 
 function getArcjetInstance() {
   if (!arcjetInstance) {
-    arcjetInstance = arcjet({
+    arcjetInstance = arcjetLib({
       key: env.ARCJET_KEY,
       characteristics: ["fingerprint"],
       rules: [
@@ -37,9 +37,16 @@ function getArcjetInstance() {
   return arcjetInstance;
 }
 
-const arcjetProxy = new Proxy({} as ReturnType<typeof arcjet>, {
+// Create a proxy that lazily initializes and properly binds methods
+const arcjetProxy = new Proxy({} as ReturnType<typeof arcjetLib>, {
   get(_target, prop) {
-    return getArcjetInstance()[prop as keyof ReturnType<typeof arcjet>];
+    const instance = getArcjetInstance();
+    const value = instance[prop as keyof typeof instance];
+    // Bind functions to the instance so method chaining works
+    if (typeof value === "function") {
+      return value.bind(instance);
+    }
+    return value;
   },
 });
 

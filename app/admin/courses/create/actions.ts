@@ -30,6 +30,7 @@ export async function createCourseAction(
   const Usersession = await requireAdmin();
   try {
     const req = await request();
+    // @ts-expect-error - Arcjet withRule() typing issue in beta version
     const decision = await aj.protect(req, {
       fingerprint: Usersession?.user?.id,
     });

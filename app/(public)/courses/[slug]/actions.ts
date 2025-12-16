@@ -23,9 +23,8 @@ export async function EnrollInCourseAction(
   try {
     const user = await requireUser();
     const req = await request();
-    const decision = await aj.protect(req, {
-      fingerprint: user?.id,
-    });
+    // @ts-expect-error - Arcjet withRule() typing issue in beta version
+    const decision = await aj.protect(req, { fingerprint: user.id });
 
     if (decision.isDenied()) {
       return {
