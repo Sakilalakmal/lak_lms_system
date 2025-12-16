@@ -47,7 +47,7 @@ export const config = {
 // Pass any existing middleware with the optional existingMiddleware prop
 export default createMiddleware(aj, async (request: NextRequest) => {
   if (request.nextUrl.pathname.startsWith("/admin")) {
-    return middleware(request);
+    return proxy(request);
   }
 
   return NextResponse.next();
