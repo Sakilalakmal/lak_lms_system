@@ -19,7 +19,7 @@ const aj = arcjet.withRule(
 
 export async function EnrollInCourseAction(
   courseId: string
-): Promise<ApiResponse> {
+): Promise<ApiResponse<{ checkoutUrl: string }>> {
   try {
     const user = await requireUser();
     const req = await request();
