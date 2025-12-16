@@ -114,7 +114,7 @@ export function LessonEditForm({ data, chapterId, courseId }: LessonFormProps) {
                   <FormItem>
                     <FormLabel>Lesson Description</FormLabel>
                     <FormControl>
-                      <RichTextEditor field={field} />
+                      <RichTextEditor field={{ ...field, value: field.value ?? "" }} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
