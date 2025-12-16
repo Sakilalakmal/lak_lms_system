@@ -5,6 +5,9 @@ import {
 } from "../_components/PublicCourse-card";
 import { Suspense } from "react";
 
+// Force dynamic rendering - don't pre-render at build time
+export const dynamic = 'force-dynamic';
+
 export default function PublicCoursesRoute() {
   return (
     <div className="mt-8">

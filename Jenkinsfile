@@ -8,6 +8,21 @@ pipeline {
         // Skip environment variable validation during CI build
         // The app will validate env vars at runtime when deployed
         SKIP_ENV_VALIDATION = 'true'
+        // Dummy DATABASE_URL for build-time (not used in production)
+        DATABASE_URL = 'postgresql://dummy:dummy@localhost:5432/dummy'
+        // Dummy auth secrets for build-time
+        BETTER_AUTH_SECRET = 'dummy-secret-for-build'
+        BETTER_AUTH_URL = 'http://localhost:3000'
+        AUTH_GITHUB_CLIENT_ID = 'dummy-github-id'
+        AUTH_GITHUB_SECRET = 'dummy-github-secret'
+        RESEND_API_KEY = 'dummy-resend-key'
+        ARCJET_KEY = 'dummy-arcjet-key'
+        AWS_ACCESS_KEY_ID = 'dummy-aws-key'
+        AWS_SECRET_ACCESS_KEY = 'dummy-aws-secret'
+        AWS_REGION = 'us-east-1'
+        STRIPE_API_KEY = 'dummy-stripe-key'
+        STRIPE_WEBHOOK_SECRET = 'dummy-webhook-secret'
+        NEXT_PUBLIC_S3_NAME_IMGES = 'dummy-bucket'
     }
     
     stages {
