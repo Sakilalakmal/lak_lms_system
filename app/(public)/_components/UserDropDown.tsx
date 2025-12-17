@@ -29,6 +29,7 @@ interface myAppProps {
 export function UserDropDown({ email, name, image }: myAppProps) {
   const { handleSignOut } = useSignout();
 
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
