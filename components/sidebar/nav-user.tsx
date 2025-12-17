@@ -110,13 +110,7 @@ export function NavUser() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={"/admin"}>
-                  <IconDashboard />
-                  Dashboard
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={"/admin/courses"}>
+                <Link href={"/courses"}>
                   <Tv2 />
                   Courses
                 </Link>
