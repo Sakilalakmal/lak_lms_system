@@ -116,6 +116,101 @@ export async function POST(req: Request) {
           amount: Math.round((session.amount_total || 0) / 100),
         },
       });
+    } else if (event.type === "customer.subscription.created") {
+      console.log("📖 Processing subscription creation...");
+      const subscription = event.data.object as Stripe.Subscription;
+
+      console.log("💳 Subscription details:", {
+        subscriptionId: subscription.id,
+        customerId: subscription.customer,
+        status: subscription.status,
+        metadata: subscription.metadata,
+      });
+
+      const subscriptionType = subscription.metadata?.subscriptionType;
+
+      if (subscriptionType !== "tutor") {
+        console.log("ℹ️ Not a tutor subscription, ignoring");
+        return new Response("OK", { status: 200 });
+      }
+
+      // Find user by Stripe customer ID
+      const user = await prisma.user.findUnique({
+        where: {
+          stripeCustomerId: subscription.customer as string,
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+        },
+      });
+
+      if (!user) {
+        console.error("❌ User not found for subscription");
+        return new Response("User not found", { status: 400 });
+      }
+
+      // Check if subscription is active
+      if (subscription.status === "active") {
+        // Update user role to ADMIN
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            role: "ADMIN",
+          },
+        });
+
+        console.log(`✅ User ${user.email} upgraded to ADMIN role`);
+      }
+    } else if (event.type === "customer.subscription.deleted") {
+      console.log("📖 Processing subscription cancellation...");
+      const subscription = event.data.object as Stripe.Subscription;
+
+      console.log("💳 Subscription cancellation details:", {
+        subscriptionId: subscription.id,
+        customerId: subscription.customer,
+        metadata: subscription.metadata,
+      });
+
+      const subscriptionType = subscription.metadata?.subscriptionType;
+
+      if (subscriptionType !== "tutor") {
+        console.log("ℹ️ Not a tutor subscription, ignoring");
+        return new Response("OK", { status: 200 });
+      }
+
+      // Find user by Stripe customer ID
+      const user = await prisma.user.findUnique({
+        where: {
+          stripeCustomerId: subscription.customer as string,
+        },
+        select: {
+          id: true,
+          email: true,
+          role: true,
+        },
+      });
+
+      if (!user) {
+        console.error("❌ User not found for subscription cancellation");
+        return new Response("User not found", { status: 400 });
+      }
+
+      // Downgrade user role (remove ADMIN)
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          role: null,
+        },
+      });
+
+      console.log(`✅ User ${user.email} downgraded from ADMIN role`);
     } else {
       console.log("ℹ️ Ignoring event type:", event.type);
     }

@@ -1,5 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
-import { ArrowBigLeft, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/learning.png";
@@ -26,7 +26,7 @@ export default function AuthLayout({
           className="flex items-center gap-2 self-center font-medium"
           href="/"
         >
-          <Image src={logo} alt="compnay-logo" height={42} width={42} />
+          <Image src={logo} alt="compnay-logo" height={60} width={60} />
           LakLMS.
         </Link>
         {children}
