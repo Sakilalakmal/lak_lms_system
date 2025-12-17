@@ -15,6 +15,8 @@ export const env = createEnv({
     AWS_REGION: z.string().min(1),
     STRIPE_API_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
+    AUTH_GOOGLE_CLIENT_ID: z.string().min(1),
+    AUTH_GOOGLE_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_S3_NAME_IMGES: z.string().min(1),
@@ -24,7 +26,7 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     NEXT_PUBLIC_S3_NAME_IMGES: process.env.NEXT_PUBLIC_S3_NAME_IMGES,
   },
-  
+
   // Skip validation during build if SKIP_ENV_VALIDATION is set
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
