@@ -77,7 +77,7 @@ export async function CreateTutorSubscriptionAction(): Promise<
 
     // Get the default price for this product
     const prices = await stripe.prices.list({
-      product: "prod_TcTaeJnLjtfOVB",
+      product: env.STRIPE_TUTOR_PRODUCT_ID,
       active: true,
       limit: 1,
     });
@@ -106,6 +106,12 @@ export async function CreateTutorSubscriptionAction(): Promise<
       metadata: {
         userId: user.id,
         subscriptionType: "tutor",
+      },
+      subscription_data: {
+        metadata: {
+          userId: user.id,
+          subscriptionType: "tutor",
+        },
       },
     });
 

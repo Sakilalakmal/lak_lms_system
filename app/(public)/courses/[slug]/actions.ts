@@ -42,6 +42,7 @@ export async function EnrollInCourseAction(
         title: true,
         price: true,
         slug: true,
+        stripePriceId: true,
       },
     });
 
@@ -139,16 +140,23 @@ export async function EnrollInCourseAction(
         });
       }
 
+      // Validate that course has a stripePriceId
+      if (!course.stripePriceId) {
+        throw new Error(
+          `Course ${course.title} is missing Stripe price ID. Please contact support.`
+        );
+      }
+
       const checkOutSession = await stripe.checkout.sessions.create({
         customer: stripeCustomerId,
         line_items: [
           {
-            price: "price_1STFwrEQSNuedsZHXJScEfpv",
+            price: course.stripePriceId,
             quantity: 1,
           },
         ],
         mode: "payment",
-        success_url: `${env.BETTER_AUTH_URL}/payment/success`,
+        success_url: `${env.BETTER_AUTH_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${env.BETTER_AUTH_URL}/payment/cancel`,
         metadata: {
           userId: user.id,

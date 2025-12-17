@@ -15,6 +15,7 @@ export const env = createEnv({
     AWS_REGION: z.string().min(1),
     STRIPE_API_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
+    STRIPE_TUTOR_PRODUCT_ID: z.string().min(1),
     AUTH_GOOGLE_CLIENT_ID: z.string().min(1),
     AUTH_GOOGLE_SECRET: z.string().min(1),
   },
