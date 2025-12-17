@@ -12,7 +12,6 @@ import {
   courseInputSchema,
 } from "@/lib/zodSchema";
 import { request } from "@arcjet/next";
-import { log } from "console";
 
 import { headers } from "next/headers";
 
