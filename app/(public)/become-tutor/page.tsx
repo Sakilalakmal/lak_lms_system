@@ -3,47 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  GraduationCap,
-  CheckCircle2,
-  TrendingUp,
-  Users,
-  BarChart3,
-  Shield,
-} from "lucide-react";
+import { CheckCircle2, Shield } from "lucide-react";
 import { CreateTutorSubscriptionAction } from "@/app/actions/tutor-subscription-action";
 import { useState } from "react";
 import { toast } from "sonner";
-
-const benefits = [
-  {
-    icon: GraduationCap,
-    title: "Create & Manage Courses",
-    description:
-      "Design and publish your own courses with our powerful course builder.",
-  },
-  {
-    icon: Users,
-    title: "Build Your Student Community",
-    description: "Grow your audience and teach students from around the world.",
-  },
-  {
-    icon: BarChart3,
-    title: "Track Your Success",
-    description:
-      "Access detailed analytics about your courses and student engagement.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Earn Revenue",
-    description: "Monetize your expertise and earn from course enrollments.",
-  },
-  {
-    icon: Shield,
-    title: "Admin Dashboard Access",
-    description: "Get full access to the tutor dashboard and admin tools.",
-  },
-];
 
 export default function BecomeTutorPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -75,10 +38,13 @@ export default function BecomeTutorPage() {
         <Badge variant="outline" className="text-base px-4 py-2">
           Become a Tutor
         </Badge>
-        <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-violet-500">
+        <h1 className="text-5xl md:text-6xl font-bold ">
           Share Your Knowledge,
           <br />
-          Inspire Students Worldwide
+          <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-violet-500">
+            Inspire Students
+          </span>{" "}
+          Worldwide
         </h1>
         <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto">
           Join our community of expert tutors and start creating impactful
@@ -86,48 +52,30 @@ export default function BecomeTutorPage() {
           teaching business.
         </p>
       </div>
-
-      {/* Benefits Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        {benefits.map((benefit, index) => (
-          <Card
-            key={index}
-            className="hover:shadow-lg transition-all duration-300 border-2 hover:border-blue-500/50"
-          >
-            <CardHeader className="space-y-4">
-              <div className="p-3 rounded-lg bg-linear-to-r from-blue-500 to-violet-500 w-fit">
-                <benefit.icon className="h-6 w-6 text-white" />
-              </div>
-              <CardTitle className="text-xl">{benefit.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">{benefit.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
       {/* Pricing Card */}
-      <Card className="max-w-2xl mx-auto border-2 border-blue-500/20 shadow-xl">
-        <CardHeader className="text-center space-y-4 pb-8">
+      <Card className="max-w-xl mx-auto border-2 border-blue-500/20 shadow-xl">
+        <CardHeader className="text-center space-y-2 pb-8">
           <div className="inline-block">
-            <Badge className="bg-linear-to-r from-blue-500 to-violet-500 text-white border-0 px-4 py-1">
-              Most Popular
+            <Badge className="bg-linear-to-r  border-0 px-4 py-1">
+              Best price
             </Badge>
           </div>
           <CardTitle className="text-3xl md:text-4xl font-bold">
-            Tutor Subscription
+            Tutor Subscription{" "}
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-violet-500">
+              $10
+            </span>
           </CardTitle>
           <p className="text-muted-foreground">
             Everything you need to start teaching and earning
           </p>
         </CardHeader>
 
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-6">
           {/* Features List */}
           <div className="space-y-4">
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium">Unlimited Course Creation</p>
                 <p className="text-sm text-muted-foreground">
@@ -136,7 +84,7 @@ export default function BecomeTutorPage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium">Full Admin Dashboard</p>
                 <p className="text-sm text-muted-foreground">
@@ -145,7 +93,7 @@ export default function BecomeTutorPage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium">Student Analytics</p>
                 <p className="text-sm text-muted-foreground">
@@ -154,7 +102,7 @@ export default function BecomeTutorPage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium">Priority Support</p>
                 <p className="text-sm text-muted-foreground">
@@ -163,7 +111,7 @@ export default function BecomeTutorPage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium">Revenue Sharing</p>
                 <p className="text-sm text-muted-foreground">
@@ -175,8 +123,8 @@ export default function BecomeTutorPage() {
 
           {/* CTA Button */}
           <Button
-            size="lg"
-            className="w-full bg-linear-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white text-lg h-14"
+            size="icon-sm"
+            className="w-full h-10 bg-linear-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white  text-lg "
             onClick={handleSubscribe}
             disabled={isLoading}
           >
@@ -186,7 +134,9 @@ export default function BecomeTutorPage() {
                 Processing...
               </>
             ) : (
-              "Start Your Tutor Journey"
+              <span className="text-sm font-bold">
+                Start Your Tutor Journey
+              </span>
             )}
           </Button>
 
@@ -201,7 +151,7 @@ export default function BecomeTutorPage() {
         <p className="text-sm text-muted-foreground">
           Trusted by educators worldwide
         </p>
-        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary">
           <Shield className="h-4 w-4" />
           <span>30-day money-back guarantee</span>
         </div>
