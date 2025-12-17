@@ -30,7 +30,7 @@ export async function proxy(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
 
   if (!sessionCookie) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
@@ -40,13 +40,17 @@ export const config = {
   // matcher tells Next.js which routes to run the middleware on.
   // This runs the middleware on all routes except for static assets and webhooks.
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|api/auth|api/webhook).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/auth|api/webhook|login|verify-request).*)",
   ],
 };
 
 // Pass any existing middleware with the optional existingMiddleware prop
 export default createMiddleware(aj, async (request: NextRequest) => {
-  if (request.nextUrl.pathname.startsWith("/admin")) {
+  // Only protect specific routes that require authentication
+  if (
+    request.nextUrl.pathname.startsWith("/admin") ||
+    request.nextUrl.pathname.startsWith("/dashboard")
+  ) {
     return proxy(request);
   }
 

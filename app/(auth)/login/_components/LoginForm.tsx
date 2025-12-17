@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GithubIcon, Loader, Loader2, Send } from "lucide-react";
+import { GithubIcon, Loader2, Send } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 import { useTransition } from "react";
