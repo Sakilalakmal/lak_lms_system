@@ -1,4 +1,5 @@
 import { env } from "@/lib/env";
+import { Role } from "@/lib/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
@@ -431,7 +432,7 @@ export async function POST(req: Request) {
           id: user.id,
         },
         data: {
-          role: null,
+          role: Role.USER,
         },
       });
 

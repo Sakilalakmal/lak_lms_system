@@ -4,9 +4,11 @@ import {
   PublicCourseCardSkeleton,
 } from "../_components/PublicCourse-card";
 import { Suspense } from "react";
+import { EmptyCourseState } from "@/components/general/EmptyCourseState";
+import { Ban } from "lucide-react";
 
 // Force dynamic rendering - don't pre-render at build time
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function PublicCoursesRoute() {
   return (
@@ -31,11 +33,23 @@ async function RenderingCourses() {
   const courses = await getAllCourses();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {courses.map((course) => (
-        <PublicCourseCard key={course.id} data={course} />
-      ))}
-    </div>
+    <>
+      {courses.length === 0 ? (
+        <EmptyCourseState
+          title="cannot find any available courses"
+          description="stay tuned new courses will added"
+          buttonText="Go Back"
+          icon={<Ban />}
+          href="/"
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course) => (
+            <PublicCourseCard key={course.id} data={course} />
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
