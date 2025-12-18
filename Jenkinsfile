@@ -5,6 +5,8 @@ pipeline {
     
     environment {
         GITHUB_TOKEN = credentials('LMS_TOKEN')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKER_IMAGE = 'sakilalakmal/lak_lms_system'
         // Skip environment variable validation during CI build
         // The app will validate env vars at runtime when deployed
         SKIP_ENV_VALIDATION = 'true'
@@ -54,6 +56,35 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Building Docker image...'
+                script {
+                    bat "docker build -t %DOCKER_IMAGE%:${env.BUILD_NUMBER} -t %DOCKER_IMAGE%:latest ."
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Logging in to Docker Hub...'
+                script {
+                    bat "echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin"
+                }
+                echo 'Pushing Docker image to Docker Hub...'
+                script {
+                    bat "docker push %DOCKER_IMAGE%:${env.BUILD_NUMBER}"
+                    bat "docker push %DOCKER_IMAGE%:latest"
+                }
+            }
+        }
+
         stage('Auto-merge PR') {
             when {
                 expression { 
@@ -81,6 +112,12 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed! ❌'
+        }
+        always {
+            script {
+                // Logout from Docker Hub
+                bat 'docker logout || exit 0'
+            }
         }
         cleanup {
             cleanWs()
