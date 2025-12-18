@@ -1,4 +1,5 @@
-<img width="1475" height="675" alt="lak-lms" src="https://github.com/user-attachments/assets/d4007cba-d977-4405-9faf-14c5c291f887" />
+<img width="1475" height="675" alt="lak-lms" src="https://github.com/user-attachments/assets/db6c7db9-0096-47c0-a109-95f2b9f9dc82" />
+
 
 An advanced, full-stack Learning Management System built with Next.js 16, Prisma, Stripe, and AWS S3. Designed to provide a seamless educational experience with features like course creation, secure student enrollment, video content delivery, and real-time progress tracking.
 
