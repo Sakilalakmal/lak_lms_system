@@ -9,7 +9,6 @@ import {
   IconHelp,
   IconSearch,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
@@ -114,7 +113,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link href="/">
-                <Image src={logo} alt="logo image" width={45} height={45}/>
+                <Image src={logo} alt="logo image" width={45} height={45} />
                 <span className="text-base font-semibold">Lak_LMS</span>
               </Link>
             </SidebarMenuButton>

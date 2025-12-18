@@ -12,7 +12,6 @@ import {
 } from "./RenderState";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
-import { file } from "zod";
 import { useConstructUrl } from "@/hooks/use-contruct";
 
 interface UploaderProps {
@@ -52,7 +51,7 @@ export function Uploader({
     objectUrl: value ? fileUrl : undefined,
   });
 
-  async function uploadFile(file: File) {
+  const uploadFile = useCallback(async (file: File) => {
     setFileState((prev) => ({
       ...prev,
       uploading: true,
@@ -150,7 +149,7 @@ export function Uploader({
 
         xhr.send(file);
       });
-    } catch (error) {
+    } catch {
       toast.error("File upload failed. Please try again.");
       setFileState((prev) => ({
         ...prev,
@@ -159,7 +158,7 @@ export function Uploader({
         uploading: false,
       }));
     }
-  }
+  }, [fileTypeShouldbe, onChange]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {

@@ -21,6 +21,7 @@ export function RichTextEditor({ field }: { field: RichTextEditorField }) {
       // Try to parse as JSON first (Tiptap format)
       return JSON.parse(field.value);
     } catch (error) {
+      console.error(error);
       // If parsing fails, treat as plain text and wrap in paragraph
       return `<p>${field.value}</p>`;
     }

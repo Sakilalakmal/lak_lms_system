@@ -8,7 +8,7 @@ import Stripe from "stripe";
 // Disable Next.js body parsing - we need the raw body for Stripe signature verification
 export const runtime = "nodejs";
 
-export async function GET(req: Request) {
+export async function GET() {
   console.log("🧪 GET request to webhook endpoint");
   return new Response(
     "Webhook endpoint is working! Use POST for actual webhooks.",

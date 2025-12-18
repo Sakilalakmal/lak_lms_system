@@ -17,7 +17,7 @@ export function SuccessPaymentPageCompo(role: SuccessPaymentPageProps) {
 
   useEffect(() => {
     triggerConfetti();
-  }, []);
+  });
 
   const isAdmin = role.role === "ADMIN";
 

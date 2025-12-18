@@ -17,14 +17,8 @@ import {
   IconClock,
   IconPlayerPlay,
 } from "@tabler/icons-react";
-import {
-  CheckIcon,
-  LucideWatch,
-  PlayCircleIcon,
-  WatchIcon,
-} from "lucide-react";
+import { CheckIcon, PlayCircleIcon } from "lucide-react";
 import Image from "next/image";
-import { EnrollInCourseAction } from "./actions";
 import { checkIfAlreadyBaughtCourse } from "@/app/data/user/user-is-enrolled";
 import Link from "next/link";
 import { EnrollmentButton } from "./_components/enrollmentButton";

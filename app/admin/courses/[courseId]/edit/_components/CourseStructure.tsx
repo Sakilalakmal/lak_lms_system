@@ -21,7 +21,6 @@ import {
 import { useEffect, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
-import { listeners, title } from "process";
 import { cn } from "@/lib/utils";
 import {
   Collapsible,
@@ -34,7 +33,6 @@ import {
   ChevronRight,
   FileTextIcon,
   GripVertical,
-  Trash2Icon,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
