@@ -1,7 +1,4 @@
 # 🎓 LAK LMS (Learning Management System)
-
-An advanced, full-stack Learning Management System built with **Next.js 16**, **Prisma**, **Stripe**, and **AWS S3**. Designed to provide a seamless educational experience with features like course creation, secure student enrollment, video content delivery, and real-time progress tracking.
-
 ---
 
 <img width="1475" height="675" alt="lak-lms" src="https://github.com/user-attachments/assets/db6c7db9-0096-47c0-a109-95f2b9f9dc82" />
@@ -19,7 +16,7 @@ An advanced, full-stack Learning Management System built with Next.js 16, Prisma
 - **🛡️ Advanced Security**: Protected by **Arcjet** for bot detection, rate limiting, and SQL injection prevention.
 - **📧 Transactional Emails**: Automated email notifications and OTPs via **Resend**.
 - **📊 Interactive Dashboard**: Visual analytics and stats using **Recharts** and **TanStack Table**.
-- **🎨 Modern UI/UX**: fast and responsive interface built with **Tailwind CSS 4** and **Radix UI** components.
+- **🎨 Modern UI/UX**: fast and responsive interface built with **Tailwind CSS 4** and **Radix UI(ShadcnUI)** components.
 
 ---
 
@@ -190,3 +187,4 @@ This project is proprietary and confidential.
 ---
 
 Made with ❤️ by [Sakila Lakmal](https://github.com/Sakilalakmal)
+
