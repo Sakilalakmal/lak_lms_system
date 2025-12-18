@@ -10,6 +10,8 @@ RUN npm install -g pnpm
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
 
+COPY prisma ./prisma
+
 # Install all dependencies
 RUN pnpm install
 
