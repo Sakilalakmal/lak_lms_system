@@ -36,6 +36,7 @@ function LoginForm() {
           },
           onError: (error) => {
             toast.error("internal server error");
+            console.error(error);
           },
         },
       });
@@ -73,6 +74,7 @@ function LoginForm() {
           },
           onError: (error) => {
             toast.error("internal server error");
+            console.error(error);
           },
         },
       });

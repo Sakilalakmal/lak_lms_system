@@ -40,6 +40,7 @@ function VerifyRequestContent() {
           },
           onError: (error) => {
             toast.error("error verifying email otp");
+            console.error(error);
           },
         },
       });

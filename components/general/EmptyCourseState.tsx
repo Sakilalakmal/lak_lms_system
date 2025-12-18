@@ -7,7 +7,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "../ui/empty";
-import { Button, buttonVariants } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 import Link from "next/link";
 
 interface EmptyCourseStateProps {

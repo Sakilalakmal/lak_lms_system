@@ -13,7 +13,6 @@ import {
   Bold,
   Heading1,
   Heading2,
-  Heading3,
   Heading3Icon,
   Italic,
   ListIcon,
@@ -23,8 +22,6 @@ import {
   Undo,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { text } from "stream/consumers";
-import { levels } from "better-auth";
 import { Button } from "../ui/button";
 
 interface iAppProps {

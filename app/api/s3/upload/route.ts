@@ -1,14 +1,11 @@
 import { env } from "@/lib/env";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { error } from "console";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { S3 } from "@/lib/s3Client";
 import arcjet, { fixedWindow } from "@/lib/arcjet";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { requireAdmin } from "@/app/data/admin/require-admin";
 
 export const fileUploadSchema = z.object({
@@ -51,7 +48,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 
-    const { fileName, contentType, size, isImage } = validation.data;
+    const { fileName, contentType, size, } = validation.data;
 
     const unique = `${uuidv4()}-${fileName}`;
 

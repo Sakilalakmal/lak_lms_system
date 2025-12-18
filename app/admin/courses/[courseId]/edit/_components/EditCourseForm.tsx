@@ -10,7 +10,7 @@ import {
   CourseSchemaType,
   courseStatus,
 } from "@/lib/zodSchema";
-import { ArrowLeft, Loader2, PlusCircleIcon, SparkleIcon } from "lucide-react";
+import {  Loader2, PlusCircleIcon, SparkleIcon } from "lucide-react";
 import {
   Form,
   FormControl,

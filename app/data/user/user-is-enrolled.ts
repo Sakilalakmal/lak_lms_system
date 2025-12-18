@@ -1,8 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { ApiResponse } from "@/lib/types";
 import { headers } from "next/headers";
-import { use } from "react";
 
 export async function checkIfAlreadyBaughtCourse(
   courseId: string

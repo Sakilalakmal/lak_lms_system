@@ -10,13 +10,11 @@ import {
   courseInputSchema,
   CourseInputType,
   courseSchema,
-  CourseSchemaType,
   lessonSchema,
   LessonSchemaType,
 } from "@/lib/zodSchema";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
-import { Pridi } from "next/font/google";
 
 const aj = arcjet.withRule(
   fixedWindow({
@@ -180,6 +178,7 @@ export async function reorderChapters(
       message: "Chapters reordered successfully",
     };
   } catch (error) {
+    console.error(error);
     return {
       status: "error",
       message: "Failed to reorder chapters",
@@ -226,7 +225,7 @@ export async function CreateChapter(
       message: "Chapter created successfully",
     };
   } catch (error) {
-    console.log("failed to create a chapter");
+    console.log("failed to create a chapter",error);
 
     return {
       status: "error",
@@ -277,7 +276,7 @@ export async function CreateLession(
       message: "Lession created successfully",
     };
   } catch (error) {
-    console.log("failed to create a lession");
+    console.log("failed to create a lession",error);
 
     return {
       status: "error",
@@ -364,6 +363,7 @@ export async function deleteLession({
       message: "Lession deleted and lessions reordered successfully",
     };
   } catch (error) {
+    console.error(error)
     return {
       status: "error",
       message: "Failed to delete course",
