@@ -3,6 +3,16 @@ import { getAllCourses } from "../data/course/get-all-course";
 import { getEnrolledCourses } from "../data/user/get-enrolled-courses";
 import { PublicCourseCard } from "../(public)/_components/PublicCourse-card";
 import { CourseProgressCard } from "./_components/CourseProgressCard";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Dashboard",
+  description: "View your enrolled courses and track your learning progress.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function DashboardPage() {
   const [allCourses, enrolledCourses] = await Promise.all([
