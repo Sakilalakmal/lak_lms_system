@@ -23,8 +23,48 @@ import { checkIfAlreadyBaughtCourse } from "@/app/data/user/user-is-enrolled";
 import Link from "next/link";
 import { EnrollmentButton } from "./_components/enrollmentButton";
 import { buttonVariants } from "@/components/ui/button";
+import { Metadata } from "next";
+import { siteConfig } from "@/lib/site-config";
 
 type params = Promise<{ slug: string }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: params;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const course = await getIndividualCourse(slug);
+
+  const thumbnailUrl = course.fileKey
+    ? `https://${env.NEXT_PUBLIC_S3_NAME_IMGES}.s3.us-east-1.amazonaws.com/${course.fileKey}`
+    : `${siteConfig.url}/opengraph-image.png`;
+
+  return {
+    title: course.title,
+    description: course.smallDescription,
+    openGraph: {
+      title: `${course.title} | Lak LMS`,
+      description: course.smallDescription,
+      type: "website",
+      url: `${siteConfig.url}/courses/${slug}`,
+      images: [
+        {
+          url: thumbnailUrl,
+          width: 1200,
+          height: 630,
+          alt: course.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: course.title,
+      description: course.smallDescription,
+      images: [thumbnailUrl],
+    },
+  };
+}
 
 export default async function SlugPageDetails({ params }: { params: params }) {
   const { slug } = await params;

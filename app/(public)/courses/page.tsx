@@ -6,6 +6,18 @@ import {
 import { Suspense } from "react";
 import { EmptyCourseState } from "@/components/general/EmptyCourseState";
 import { Ban } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Explore Courses",
+  description:
+    "Browse and discover high-quality online courses. Learn new skills from expert instructors at your own pace.",
+  openGraph: {
+    title: "Explore Courses | Lak LMS",
+    description:
+      "Browse and discover high-quality online courses. Learn new skills from expert instructors at your own pace.",
+  },
+};
 
 // Force dynamic rendering - don't pre-render at build time
 export const dynamic = "force-dynamic";
