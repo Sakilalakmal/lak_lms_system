@@ -1,6 +1,9 @@
 import { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site-config";
 import { prisma } from "@/lib/prisma";
+
+// Generate sitemap at runtime, not build time (requires database connection)
+export const dynamic = "force-dynamic";
 import { CourseStatus } from "@/lib/generated/prisma";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
