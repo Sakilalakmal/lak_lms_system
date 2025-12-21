@@ -1,4 +1,7 @@
+"use client";
+
 import { type Editor } from "@tiptap/react";
+import { useState, useEffect } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -29,6 +32,30 @@ interface iAppProps {
 }
 
 export function MenuBar({ editor }: iAppProps) {
+  // Track undo/redo availability in state
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+
+  useEffect(() => {
+    if (!editor) return;
+
+    // Update undo/redo state on any transaction
+    const updateHistoryState = () => {
+      setCanUndo(editor.can().undo());
+      setCanRedo(editor.can().redo());
+    };
+
+    // Set initial state
+    updateHistoryState();
+
+    // Subscribe to editor transactions
+    editor.on("transaction", updateHistoryState);
+
+    return () => {
+      editor.off("transaction", updateHistoryState);
+    };
+  }, [editor]);
+
   if (!editor) return null;
 
   return (
@@ -262,10 +289,9 @@ export function MenuBar({ editor }: iAppProps) {
                 variant={"ghost"}
                 type="button"
                 onClick={() => {
-                  console.log("Undo clicked, can undo:", editor.can().undo());
                   editor.chain().focus().undo().run();
                 }}
-                disabled={!editor.can().undo()}
+                disabled={!canUndo}
               >
                 <Undo />
               </Button>
@@ -280,10 +306,9 @@ export function MenuBar({ editor }: iAppProps) {
                 variant={"ghost"}
                 type="button"
                 onClick={() => {
-                  console.log("Redo clicked, can redo:", editor.can().redo());
                   editor.chain().focus().redo().run();
                 }}
-                disabled={!editor.can().redo()}
+                disabled={!canRedo}
               >
                 <Redo />
               </Button>
