@@ -6,6 +6,7 @@ import { PictureSection } from "./_components/Picture-Section";
 import { HeroImageSection } from "./_components/HeroImageSection";
 import { TechStackSection } from "./_components/TechStackSection";
 import { TestimonialSection } from "@/components/TestimonialSection";
+import { BentoGridFeatures } from "@/components/BentoGridFeatures";
 
 import React from "react";
 import { buttonVariants } from "@/components/ui/button";
@@ -56,6 +57,7 @@ export default function HomeClient() {
       <TechStackSection />
       <PictureSection />
 
+      <BentoGridFeatures />
       <TestimonialSection />
     </>
   );
