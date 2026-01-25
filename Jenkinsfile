@@ -4,7 +4,7 @@ pipeline {
     agent any
     
     environment {
-        GITHUB_TOKEN = credentials('LMS_TOKEN')
+        GITHUB = credentials('LMS_TOKEN')
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         DOCKER_IMAGE = 'sakilalakmal/lak_lms_system'
         // Skip environment variable validation during CI build
@@ -96,7 +96,7 @@ pipeline {
                 script {
                     bat """
                         curl -X PUT ^
-                        -H "Authorization: token %GITHUB_TOKEN%" ^
+                        -H "Authorization: token %GITHUB_PSW%" ^
                         -H "Accept: application/vnd.github.v3+json" ^
                         https://api.github.com/repos/Sakilalakmal/lak_lms_system/pulls/%CHANGE_ID%/merge ^
                         -d "{\\"commit_title\\":\\"Auto-merge PR #%CHANGE_ID%\\",\\"merge_method\\":\\"merge\\"}"
